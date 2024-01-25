@@ -5,7 +5,4 @@ export class CreateRoleDto{
     @IsString()
     name:string
 
-    @IsString()
-    slug:string
-
 }
