@@ -4,8 +4,7 @@ import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "t
 
 @Entity({ 'name': 'user' })
 export class User extends CommonColumns{
-    @PrimaryGeneratedColumn()
-    id: number;
+
 
     @Column({ unique: true })
     username: string;

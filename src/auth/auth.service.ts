@@ -37,7 +37,8 @@ export class AuthService {
       if (err.status) {
         throw err;
       }
-      throw new HttpException(err, HttpStatus.BAD_REQUEST);
+      throw new HttpException('Internal Server Error',
+      HttpStatus.INTERNAL_SERVER_ERROR,);
     }
   }
 }

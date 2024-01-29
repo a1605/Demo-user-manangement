@@ -1,4 +1,4 @@
-import { Permission } from './../entity/permission.entity';
+import { Permission } from './entity/permission.entity';
 import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 //import { Permission} from '../entity/permission.entity';

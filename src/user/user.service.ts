@@ -3,13 +3,15 @@ import {
   HttpStatus,
   Injectable,
   NotFoundException,
+  Query,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entity/user.entity';
 import { Repository } from 'typeorm';
-import { UpdateUserDTO } from './dto/update-user.dto';
 import { Role } from 'src/role/entity/role.entity';
 import * as bcrypt from 'bcrypt';
+import { CreateUpdateUserDto } from './dto/createUpdate-user.dto';
+import { MAX_NUM, MIN_NUM } from 'constant';
 
 @Injectable()
 export class UserService {
@@ -18,9 +20,22 @@ export class UserService {
     @InjectRepository(Role) private readonly roleRepo: Repository<Role>,
   ) {}
 
-  async getAllUsers() {
+  async getAllUsers(
+    @Query('page') page: number = MIN_NUM,
+    @Query('pageSize') pageSize: number = MAX_NUM,
+  ) {
     try {
-      return await this.userRepo.find();
+      const [users, total] = await this.userRepo.findAndCount({
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      });
+
+      return {
+        data: users,
+        page,
+        pageSize,
+        total,
+      };
     } catch (err) {
       if (err.status) {
         throw err;
@@ -28,7 +43,6 @@ export class UserService {
       throw new HttpException(err, HttpStatus.BAD_REQUEST);
     }
   }
-
   async createUser(createUserDTO) {
     try {
       const { username, password } = createUserDTO;
@@ -60,7 +74,7 @@ export class UserService {
     }
   }
 
-  async updateUserDetails(id: number, updateUserDTO: UpdateUserDTO) {
+  async updateUserDetails(id: number, updateUserDTO: CreateUpdateUserDto) {
     try {
       const user = await this.userRepo.findOne({ where: { id } });
       if (!user) {
@@ -84,7 +98,7 @@ export class UserService {
         throw new NotFoundException('User with ${id} does not exist');
       }
       this.userRepo.remove(user);
-      return 'User Has been deleted';
+      return 'User has been deleted';
     } catch (err) {
       if (err.status) {
         throw err;
@@ -100,6 +114,9 @@ export class UserService {
         relations: ['roles'],
       });
       const role = await this.roleRepo.findOne({ where: { id: roleId } });
+      if (!user || !role) {
+        throw new NotFoundException('User or Role not found');
+      }
 
       if (user && role) {
         if (!user.roles) {
@@ -115,8 +132,6 @@ export class UserService {
           this.userRepo.save(user);
         }
         return 'Role has been successfully assigned';
-      } else {
-        throw new NotFoundException('User or Role not found');
       }
     } catch (err) {
       if (err instanceof NotFoundException) {
@@ -132,8 +147,8 @@ export class UserService {
         where: { username },
         relations: ['roles'],
       });
-      if (user) return user;
-      throw new NotFoundException('User does not found');
+      if (!user) throw new NotFoundException('User does not found');
+      return user;
     } catch (err) {
       if (err.status) {
         throw err;

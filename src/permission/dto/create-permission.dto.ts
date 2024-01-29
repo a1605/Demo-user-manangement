@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsString, IsUrl, isURL } from "class-validator"
+import { IsNotEmpty, IsString, Validate} from "class-validator"
+import { IsLocalhostUrl } from "src/utils/url.utils"
 import { Url } from "url"
 
 export class CreatePermissionDto{
@@ -8,7 +9,7 @@ export class CreatePermissionDto{
 
     @IsNotEmpty()
     @IsString()
-    @IsUrl()
+    @Validate(() => IsLocalhostUrl, { message: 'URL must be a valid localhost URL' })
     url:string
 
     
