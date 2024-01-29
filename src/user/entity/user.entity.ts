@@ -1,19 +1,22 @@
-import { Role } from "src/role/entity/role.entity";
-import { CommonColumns } from "src/utils/common.utils";
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Role } from 'src/role/entity/role.entity';
+import { CommonColumns } from 'src/utils/common.utils';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-@Entity({ 'name': 'user' })
-export class User extends CommonColumns{
+@Entity({ name: 'user' })
+export class User extends CommonColumns {
+  @Column({ unique: true })
+  username: string;
 
+  @Column()
+  password: string;
 
-    @Column({ unique: true })
-    username: string;
-    
-    @Column()
-    password: string;
-
-    @ManyToMany(()=>Role,role=>role.users)
-    @JoinTable()
-    roles:Role[]
-
+  @ManyToMany(() => Role, (role) => role.users)
+  @JoinTable()
+  roles: Role[];
 }

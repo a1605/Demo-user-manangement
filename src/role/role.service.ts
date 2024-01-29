@@ -9,8 +9,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from './entity/role.entity';
-import { UpdateRoleDto } from './dto/updateRole.dto';
-import { CreateRoleDto } from './dto/createRole.dto';
+import { CreateUpdateRoleDto } from './dto/createUpdateRole.dto';
 import { PermissionService } from 'src/permission/permission.service';
 import { Permission } from 'src/permission/entity/permission.entity';
 import { MAX_NUM, MIN_NUM } from 'constant';
@@ -46,7 +45,7 @@ export class RoleService {
     }
   }
 
-  async addrole(createRoleDto: CreateRoleDto) {
+  async addrole(createRoleDto: CreateUpdateRoleDto) {
     try {
       return await this.rolerepo.save(createRoleDto);
     } catch (err) {
@@ -57,7 +56,7 @@ export class RoleService {
     }
   }
 
-  async updateRolebyId(id: number, updateRoleDto: UpdateRoleDto) {
+  async updateRolebyId(id: number, updateRoleDto: CreateUpdateRoleDto) {
     try {
       const role = await this.rolerepo.findOne({ where: { id } });
       if (!role) throw new NotFoundException('user not found');
@@ -85,19 +84,33 @@ export class RoleService {
     }
   }
   async assignPermissionToRole(roleId: number, permissionId: number) {
-    const role = this.rolerepo.findOne({ where: { id: roleId } });
-    const permission = this.permissionRepos.findOne({
-      where: { id: permissionId },
-    });
-    if (role && permission) {
-      if (!(await role).permissions) {
-        (await role).permissions = [];
+    try {
+      const role = await this.rolerepo.findOne({ where: { id: roleId } });
+      const permission = await this.permissionRepos.findOne({
+        where: { id: permissionId },
+      });
+      if (!role || !permission) {
+        throw new NotFoundException('Permission or Role not found');
       }
-      const permissionExists = (await role).permissions.some(
-        (existingPermission) => existingPermission.id === permissionId,
-      );
-      if (!permissionExists) {
+
+      if (role && permission) {
+        if (!role.permissions) {
+          role.permissions = [];
+        }
+        const permissionExists = role.permissions.some(
+          (existingPermission) => existingPermission.id === permissionId,
+        );
+        if (!permissionExists) {
+          role.permissions.push(permission);
+          await this.rolerepo.save(role);
+        }
+        return 'Permission has been successfully assigned ';
       }
+    } catch (err) {
+      if (err.status) {
+        throw err;
+      }
+      throw new HttpException(err, HttpStatus.BAD_REQUEST);
     }
   }
 }

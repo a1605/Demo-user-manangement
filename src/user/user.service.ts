@@ -51,7 +51,8 @@ export class UserService {
         username,
         password: hashedPassword,
       });
-      return this.userRepo.save(createdUser);
+      await this.userRepo.save(createdUser);
+      return 'User has been created successfully';
     } catch (err) {
       if (err.status) {
         throw err;
@@ -78,11 +79,12 @@ export class UserService {
     try {
       const user = await this.userRepo.findOne({ where: { id } });
       if (!user) {
-        throw new NotFoundException(`User with ID ${id} not found`);
+        throw new NotFoundException(`User does not found`);
       }
 
       Object.assign(user, updateUserDTO);
-      return this.userRepo.save(user);
+      await this.userRepo.save(user);
+      return 'User Details has been Updated successfully';
     } catch (err) {
       if (err.status) {
         throw err;
@@ -95,10 +97,10 @@ export class UserService {
     try {
       const user = await this.userRepo.findOne({ where: { id } });
       if (!user) {
-        throw new NotFoundException('User with ${id} does not exist');
+        throw new NotFoundException('User does not exist');
       }
       this.userRepo.remove(user);
-      return 'User has been deleted';
+      return 'User has been deleted successfully';
     } catch (err) {
       if (err.status) {
         throw err;
@@ -131,7 +133,7 @@ export class UserService {
           user.roles.push(role);
           this.userRepo.save(user);
         }
-        return 'Role has been successfully assigned';
+        return 'Role has been assigned successfully';
       }
     } catch (err) {
       if (err instanceof NotFoundException) {

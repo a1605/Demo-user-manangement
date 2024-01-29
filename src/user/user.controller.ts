@@ -19,21 +19,21 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserService } from './user.service';
 import { User } from './entity/user.entity';
 import { CreateUpdateUserDto } from './dto/createUpdate-user.dto';
+import { PermissionGuard } from 'src/permission/permission.guard';
 
 @Controller('user')
 export class UserController {
   constructor(private userservice: UserService) {}
   @Get()
   async findAllUsers() {
-    return this.userservice.getAllUsers();
+    await this.userservice.getAllUsers();
   }
 
   @Post('add')
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @Roles('admin')
-  @UseGuards(JwtAuthGuard, RolesGuard)
   async createUser(@Body() createUpdateUserDto: CreateUpdateUserDto) {
-    this.userservice.createUser(createUpdateUserDto);
-    return 'User has been created successfully';
+    await this.userservice.createUser(createUpdateUserDto);
   }
   @Get(':id')
   async getUserById(@Param('id') id: number) {
@@ -48,13 +48,11 @@ export class UserController {
     @Param('id') id: number,
     @Body() createUpdateUserDto: CreateUpdateUserDto,
   ) {
-    this.userservice.updateUserDetails(id, createUpdateUserDto);
-    return 'User Details has been Updated successfully';
+    await this.userservice.updateUserDetails(id, createUpdateUserDto);
   }
   @Delete(':id')
   async deleteUserById(@Param('id') id: number) {
-    this.userservice.deleteById(id);
-    return 'User has been deleted successfully';
+    await this.userservice.deleteById(id);
   }
 
   @Post(':userId/assign/:roleId')
@@ -62,6 +60,6 @@ export class UserController {
     @Param('userId') userId: number,
     @Param('roleId') roleId: number,
   ) {
-    return await this.userservice.assignRoleToUser(userId, roleId);
+    await this.userservice.assignRoleToUser(userId, roleId);
   }
 }

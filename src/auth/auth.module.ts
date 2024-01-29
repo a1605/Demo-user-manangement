@@ -12,7 +12,7 @@ import { User } from 'src/user/entity/user.entity';
 import { Role } from 'src/role/entity/role.entity';
 import { JwtStrategy } from './jwt.strategy';
 import { config } from 'dotenv';
-config()
+config();
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Role]),
@@ -21,13 +21,12 @@ config()
       defaultStrategy: 'jwt',
     }),
     JwtModule.register({
-      secret:process.env.JWT_SECRET_KEY,
-      signOptions: { expiresIn:process.env.JWT_EXPIRATION_TIME },
+      secret: process.env.JWT_SECRET_KEY,
+      signOptions: { expiresIn: process.env.JWT_EXPIRATION_TIME },
     }),
   ],
   controllers: [AuthController],
   providers: [UserService, AuthService, JwtStrategy],
   exports: [JwtStrategy, PassportModule],
 })
-
 export class AuthModule {}

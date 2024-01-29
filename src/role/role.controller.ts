@@ -8,8 +8,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { RoleService } from './role.service';
-import { CreateRoleDto } from './dto/createRole.dto';
-import { UpdateRoleDto } from './dto/updateRole.dto';
+import { CreateUpdateRoleDto } from './dto/createUpdateRole.dto';
 import { PermissionService } from 'src/permission/permission.service';
 
 @Controller('role')
@@ -20,14 +19,14 @@ export class RoleController {
     return this.roleService.getRoles();
   }
   @Post()
-  async addrole(@Body() createRoleDto: CreateRoleDto) {
+  async addrole(@Body() createRoleDto: CreateUpdateRoleDto) {
     this.roleService.addrole(createRoleDto);
     return 'Role has been created Successfully';
   }
   @Put(':id')
   async updateRolebyId(
     @Param('id') id: number,
-    @Body() updateroleDto: UpdateRoleDto,
+    @Body() updateroleDto: CreateUpdateRoleDto,
   ) {
     this.roleService.updateRolebyId(id, updateroleDto);
     return 'Role has been updated Successfully';

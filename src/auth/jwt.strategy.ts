@@ -5,18 +5,17 @@ import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { Role } from 'src/role/entity/role.entity';
 import { config } from 'dotenv';
-config()
+config();
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-  
   constructor(
     private userService: UserService,
     private authService: AuthService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey:process.env.JWT_SECRET_KEY,
-    })
+      secretOrKey: process.env.JWT_SECRET_KEY,
+    });
   }
 
   async validate(payload: any) {
@@ -28,5 +27,4 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       );
     return user;
   }
-  
 }
