@@ -27,7 +27,7 @@ export class PermissionService {
   ) {
     try {
       const offset=skipCount(page,limit);
-      const [permissions, total] = await this.permissionRepository.findAndCount(
+      const [permissions, totalCount] = await this.permissionRepository.findAndCount(
         {
           skip: offset,
           take: limit,
@@ -35,10 +35,10 @@ export class PermissionService {
       );
 
       return {
-        data: permissions,
+        results:[permissions],
         page,
         limit,
-        total,
+        totalCount,
       };
     } catch (err) {
       if (err.status) {

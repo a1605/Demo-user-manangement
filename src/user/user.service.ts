@@ -27,16 +27,16 @@ export class UserService {
   ) {
     try {
       const offset=skipCount(page,limit);
-      const [users, total] = await this.userRepo.findAndCount({
+      const [users, totalCount] = await this.userRepo.findAndCount({
         skip: offset,
         take: limit,
       });
 
       return {
-        data: users,
+        results: [users],
         page,
         limit,
-        total,
+        totalCount,
       };
     } catch (err) {
       if (err.status) {

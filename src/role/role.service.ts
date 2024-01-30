@@ -27,16 +27,16 @@ export class RoleService {
   ) {
     try {
       const offset=skipCount(page,limit);
-      const [roles, total] = await this.rolerepo.findAndCount({
+      const [roles, totalCount] = await this.rolerepo.findAndCount({
         skip: offset,
         take: limit,
       });
 
       return {
-        data: roles,
+        results: [roles],
         page,
         limit,
-        total,
+        totalCount,
       };
     } catch (err) {
       if (err.status) {
