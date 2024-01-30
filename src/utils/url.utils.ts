@@ -14,3 +14,5 @@ export class IsLocalhostUrl implements ValidatorConstraintInterface {
     return 'URL must be a valid localhost URL';
   }
 }
+
+

@@ -8,6 +8,8 @@ export class Permission extends CommonColumns {
   name: string;
   @Column()
   url: string;
+  @Column()
+  method: string;
   @ManyToMany((type) => Role, (role) => role.permissions)
   roles: Role[];
 }

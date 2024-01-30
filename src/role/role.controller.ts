@@ -33,7 +33,7 @@ export class RoleController {
   }
   @Delete(':id')
   async deleteRolebyId(@Param('id') id: number) {
-    this.roleService.deleteRoleById(id);
+    return this.roleService.deleteRoleById(id);
   }
 
   @Post(':roleId/assign/:permissionId')

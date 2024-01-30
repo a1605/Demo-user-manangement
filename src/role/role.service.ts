@@ -1,4 +1,3 @@
-import { Permissions } from './../permission/permissions.decorator';
 import { Repository } from 'typeorm';
 import {
   HttpException,
@@ -106,6 +105,21 @@ export class RoleService {
         }
         return 'Permission has been successfully assigned ';
       }
+    } catch (err) {
+      if (err.status) {
+        throw err;
+      }
+      throw new HttpException(err, HttpStatus.BAD_REQUEST);
+    }
+  }
+  async findByRolename(roleName: string) {
+    try {
+      const role = await this.rolerepo.findOne({
+        where: { name: roleName },
+        relations: ['permissions'],
+      });
+      if (!role) throw new NotFoundException('Role does not found');
+      return role;
     } catch (err) {
       if (err.status) {
         throw err;

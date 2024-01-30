@@ -22,18 +22,19 @@ import { CreateUpdateUserDto } from './dto/createUpdate-user.dto';
 import { PermissionGuard } from 'src/permission/permission.guard';
 
 @Controller('user')
+//@UseGuards(JwtAuthGuard,PermissionGuard)
 export class UserController {
   constructor(private userservice: UserService) {}
   @Get()
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   async findAllUsers() {
-    await this.userservice.getAllUsers();
+    return await this.userservice.getAllUsers();
   }
 
   @Post('add')
   @UseGuards(JwtAuthGuard, PermissionGuard)
-  @Roles('admin')
   async createUser(@Body() createUpdateUserDto: CreateUpdateUserDto) {
-    await this.userservice.createUser(createUpdateUserDto);
+    return await this.userservice.createUser(createUpdateUserDto);
   }
   @Get(':id')
   async getUserById(@Param('id') id: number) {
@@ -48,11 +49,11 @@ export class UserController {
     @Param('id') id: number,
     @Body() createUpdateUserDto: CreateUpdateUserDto,
   ) {
-    await this.userservice.updateUserDetails(id, createUpdateUserDto);
+    return await this.userservice.updateUserDetails(id, createUpdateUserDto);
   }
   @Delete(':id')
   async deleteUserById(@Param('id') id: number) {
-    await this.userservice.deleteById(id);
+    return await this.userservice.deleteById(id);
   }
 
   @Post(':userId/assign/:roleId')
@@ -60,6 +61,6 @@ export class UserController {
     @Param('userId') userId: number,
     @Param('roleId') roleId: number,
   ) {
-    await this.userservice.assignRoleToUser(userId, roleId);
+    return await this.userservice.assignRoleToUser(userId, roleId);
   }
 }

@@ -51,7 +51,7 @@ export class UserService {
         username,
         password: hashedPassword,
       });
-      await this.userRepo.save(createdUser);
+      this.userRepo.save(createdUser);
       return 'User has been created successfully';
     } catch (err) {
       if (err.status) {

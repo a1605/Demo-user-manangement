@@ -9,12 +9,17 @@ import { AuthModule } from 'src/auth/auth.module';
 import { UtilsModule } from 'src/utils/utils.module';
 import { RoleService } from 'src/role/role.service';
 import { Permission } from 'src/permission/entity/permission.entity';
+import { JwtService } from '@nestjs/jwt';
+import { PermissionService } from 'src/permission/permission.service';
 
 @Module({
-  imports: [forwardRef(() => AuthModule), TypeOrmModule.forFeature([User, Role,Permission]),UtilsModule],
-  controllers: [UserController],
-  providers: [UserService,RoleService
+  imports: [
+    forwardRef(() => AuthModule),
+    TypeOrmModule.forFeature([User, Role, Permission]),
+    UtilsModule,
   ],
+  controllers: [UserController],
+  providers: [UserService, RoleService, JwtService, PermissionService],
   exports: [UserService],
 })
 export class UserModule {}
