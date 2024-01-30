@@ -7,7 +7,8 @@ import {
   Validate,
 } from 'class-validator';
 import { MAXIMUM_LENGTH } from 'constant';
-import { validatePassword } from 'src/utils/password.utils';
+import { validatePassword } from 'utils';
+
 
 export class CreateUpdateUserDto {
   @IsNotEmpty()

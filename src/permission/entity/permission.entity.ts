@@ -1,7 +1,7 @@
 import { Role } from 'src/role/entity/role.entity';
-import { CommonColumns } from 'src/utils/common.utils';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Url } from 'url';
+import { CommonColumns } from 'utils';
 @Entity()
 export class Permission extends CommonColumns {
   @Column()

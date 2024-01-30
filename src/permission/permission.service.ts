@@ -11,6 +11,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MAX_NUM, MIN_NUM } from 'constant';
 import { Permission } from './entity/permission.entity';
 import { Role } from 'src/role/entity/role.entity';
+import { skipCount } from 'utils';
 
 @Injectable()
 export class PermissionService {
@@ -22,20 +23,21 @@ export class PermissionService {
   ) {}
   async getAllPermission(
     @Query('page') page: number = MIN_NUM,
-    @Query('pageSize') pageSize: number = MAX_NUM,
+    @Query('limit') limit: number = MAX_NUM,
   ) {
     try {
+      const offset=skipCount(page,limit);
       const [permissions, total] = await this.permissionRepository.findAndCount(
         {
-          skip: (page - 1) * pageSize,
-          take: pageSize,
+          skip: offset,
+          take: limit,
         },
       );
 
       return {
         data: permissions,
         page,
-        pageSize,
+        limit,
         total,
       };
     } catch (err) {
@@ -65,7 +67,7 @@ export class PermissionService {
   }
   async deletePermissionById(id: number) {
     try {
-      const user = await this.permissionRepository.findOne({ where: { id } });
+      const user = await this.permissionRepository.findOne({ where: {id} });
       if (!user) {
         throw new NotFoundException('Permission does not exist');
       }

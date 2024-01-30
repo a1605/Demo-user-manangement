@@ -1,8 +1,9 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Role } from 'src/role/entity/role.entity';
 import { RoleService } from 'src/role/role.service';
-import { PathCorrection } from 'src/utils/path.utils';
 import { Permission } from 'src/permission/entity/permission.entity';
+import { urlCorrection } from 'utils';
+
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
@@ -20,19 +21,16 @@ export class PermissionGuard implements CanActivate {
 
     const requestUrl = request.url;
     const requestMethod = request.method.toLowerCase();
-    let permissionGuard = 0;
     for (const permission of allPermissions) {
       if (
-        PathCorrection.urlCorrection(permission.url).includes(
-          PathCorrection.urlCorrection(requestUrl),
+        urlCorrection(permission.url).includes(
+          urlCorrection(requestUrl)
         ) &&
         permission.method.toLowerCase() === requestMethod.toLowerCase()
       ) {
-        permissionGuard = 1;
-        break;
+        return true;
       }
     }
-    if (permissionGuard == 1) return true;
-    else return false;
+    return false;
   }
 }

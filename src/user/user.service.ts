@@ -12,6 +12,7 @@ import { Role } from 'src/role/entity/role.entity';
 import * as bcrypt from 'bcrypt';
 import { CreateUpdateUserDto } from './dto/createUpdate-user.dto';
 import { MAX_NUM, MIN_NUM } from 'constant';
+import { skipCount } from 'utils';
 
 @Injectable()
 export class UserService {
@@ -22,18 +23,19 @@ export class UserService {
 
   async getAllUsers(
     @Query('page') page: number = MIN_NUM,
-    @Query('pageSize') pageSize: number = MAX_NUM,
+    @Query('limit') limit: number = MAX_NUM,
   ) {
     try {
+      const offset=skipCount(page,limit);
       const [users, total] = await this.userRepo.findAndCount({
-        skip: (page - 1) * pageSize,
-        take: pageSize,
+        skip: offset,
+        take: limit,
       });
 
       return {
         data: users,
         page,
-        pageSize,
+        limit,
         total,
       };
     } catch (err) {

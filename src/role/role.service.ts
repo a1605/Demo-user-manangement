@@ -12,6 +12,7 @@ import { CreateUpdateRoleDto } from './dto/createUpdateRole.dto';
 import { PermissionService } from 'src/permission/permission.service';
 import { Permission } from 'src/permission/entity/permission.entity';
 import { MAX_NUM, MIN_NUM } from 'constant';
+import { skipCount } from 'utils';
 
 @Injectable()
 export class RoleService {
@@ -22,18 +23,19 @@ export class RoleService {
   ) {}
   async getRoles(
     @Query('page') page: number = MIN_NUM,
-    @Query('pageSize') pageSize: number = MAX_NUM,
+    @Query('limit') limit: number = MAX_NUM,
   ) {
     try {
+      const offset=skipCount(page,limit);
       const [roles, total] = await this.rolerepo.findAndCount({
-        skip: (page - 1) * pageSize,
-        take: pageSize,
+        skip: offset,
+        take: limit,
       });
 
       return {
         data: roles,
         page,
-        pageSize,
+        limit,
         total,
       };
     } catch (err) {

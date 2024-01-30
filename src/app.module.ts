@@ -11,7 +11,6 @@ import { config } from 'dotenv';
 import { PermissionModule } from './permission/permission.module';
 import { Permission } from './permission/entity/permission.entity';
 import { UserModule } from './user/user.module';
-import { UtilsModule } from './utils/utils.module';
 
 @Module({
   imports: [
@@ -31,7 +30,6 @@ import { UtilsModule } from './utils/utils.module';
     RoleModule,
     AuthModule,
     PermissionModule,
-    UtilsModule,
   ],
   controllers: [],
   providers: [],

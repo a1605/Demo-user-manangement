@@ -1,5 +1,5 @@
 import { Role } from 'src/role/entity/role.entity';
-import { CommonColumns } from 'src/utils/common.utils';
+
 import {
   Column,
   Entity,
@@ -7,9 +7,10 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { CommonColumns } from 'utils';
 
 @Entity({ name: 'user' })
-export class User extends CommonColumns {
+export class User extends CommonColumns{
   @Column({ unique: true })
   username: string;
 
