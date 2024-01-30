@@ -12,7 +12,7 @@ export class PermisionController {
 
   @Post('add')
   async addPermission(@Body() createPermissionDto: CreatePermissionDto) {
-   return  await this.permissionService.addPermission(createPermissionDto);
+    return await this.permissionService.addPermission(createPermissionDto);
   }
   @Delete(':id')
   async deletePermissionById(@Param('id') id: number) {

@@ -22,7 +22,6 @@ import { CreateUpdateUserDto } from './dto/createUpdate-user.dto';
 import { PermissionGuard } from 'src/permission/permission.guard';
 
 @Controller('user')
-//@UseGuards(JwtAuthGuard,PermissionGuard)
 export class UserController {
   constructor(private userservice: UserService) {}
   @Get()
