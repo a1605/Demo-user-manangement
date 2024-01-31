@@ -33,7 +33,7 @@ export class RoleService {
       });
 
       return {
-        results: [roles],
+        results: roles,
         page,
         limit,
         totalCount,

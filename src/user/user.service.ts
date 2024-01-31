@@ -33,7 +33,7 @@ export class UserService {
       });
 
       return {
-        results: [users],
+        results: users,
         page,
         limit,
         totalCount,

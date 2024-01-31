@@ -35,7 +35,7 @@ export class PermissionService {
       );
 
       return {
-        results:[permissions],
+        results:permissions,
         page,
         limit,
         totalCount,
