@@ -18,6 +18,6 @@ export class User extends CommonColumns{
   password: string;
 
   @ManyToMany(() => Role, (role) => role.users)
-  @JoinTable()
+  @JoinTable({name:'user_roles'})
   roles: Role[];
 }
