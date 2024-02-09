@@ -21,6 +21,7 @@ export class AuthService {
       const { username, password } = loginDto;
       const user = await this.userService.findByUsername(username);
       if (!user) throw new UnauthorizedException('user not present');
+
       const passwordMatch = await bcrypt.compare(password, user.password);
 
       if (!passwordMatch) {

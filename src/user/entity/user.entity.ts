@@ -14,7 +14,7 @@ export class User extends CommonColumns{
   @Column({ unique: true })
   username: string;
 
-  @Column()
+  @Column({select: false})
   password: string;
 
   @ManyToMany(() => Role, (role) => role.users)

@@ -6,8 +6,6 @@ import { User } from './user/entity/user.entity';
 import { RoleModule } from './role/role.module';
 import { Role } from './role/entity/role.entity';
 import { AuthModule } from './auth/auth.module';
-import { UserService } from './user/user.service';
-import { config } from 'dotenv';
 import { PermissionModule } from './permission/permission.module';
 import { Permission } from './permission/entity/permission.entity';
 import { UserModule } from './user/user.module';

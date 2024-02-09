@@ -18,4 +18,8 @@ export class CreatePermissionDto {
     message: 'URL must be a valid localhost URL',
   })
   url: string;
+
+  @IsNotEmpty()
+  @IsString()
+  method: string;
 }

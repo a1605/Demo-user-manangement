@@ -26,7 +26,7 @@ export class UserService {
     @Query('limit') limit: number = MAX_NUM,
   ) {
     try {
-      const offset=skipCount(page,limit);
+      const offset = skipCount(page, limit);
       const [users, totalCount] = await this.userRepo.findAndCount({
         skip: offset,
         take: limit,
@@ -147,9 +147,9 @@ export class UserService {
 
   async findByUsername(username: string): Promise<User | undefined> {
     try {
-      const user = this.userRepo.findOne({
+      const user = await this.userRepo.findOne({
         where: { username },
-        relations: ['roles'],
+        select: ['password']
       });
       if (!user) throw new NotFoundException('User does not found');
       return user;
