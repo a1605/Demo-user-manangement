@@ -28,7 +28,7 @@ import { ResponseInterceptor } from 'src/middleware/middleware.interceptor';
 export class UserController {
   constructor(private userservice: UserService) {}
   @Get('all-users')
-  //@UseGuards(JwtAuthGuard, PermissionGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   async findAllUsers() {
     return await this.userservice.getAllUsers();
   }
