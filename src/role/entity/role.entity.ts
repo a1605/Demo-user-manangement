@@ -16,7 +16,7 @@ export class Role extends CommonColumns{
     users:User[]
 
   @ManyToMany(type => Permission, permission => permission.roles)
-  @JoinTable()
+  @JoinTable({name:'role_permissions'})
   permissions: Permission[];
 
 }
